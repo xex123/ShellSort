@@ -1,2 +1,3 @@
 ﻿  ShellSort.cpp
+D:\ShellSort\ShellSort.cpp(21,14): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   ShellSort.vcxproj -> D:\ShellSort\x64\Debug\ShellSort.exe
