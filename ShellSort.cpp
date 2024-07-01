@@ -1,9 +1,45 @@
 ﻿#include <iostream>
 #include <vector>
+#include <fstream>
 #include <locale>
 #include <Windows.h>
 
 HANDLE hConsole;
+
+void Sort(std::vector<int>& data) {
+    int size = data.size();
+    for (int interval = size / 2; interval > 0; interval /= 2) {
+        for (int i = interval; i < size; i++) {
+            int temp = data[i];
+            int j;
+            for (j = i; j >= interval && data[j - interval] > temp; j -= interval) {
+                data[j] = data[j - interval];
+            }
+            data[j] = temp;
+        }
+    }
+}
+
+void ExitToMenu() {
+    int choice = 0;
+    while (choice != 1) {
+        SetConsoleTextAttribute(hConsole, 4);
+        std::cout << "\n1.Выход в меню\n";
+        SetConsoleTextAttribute(hConsole, 6);
+        std::cout << "\nВведите свой выбор: ";
+        std::cin >> choice;
+        switch (choice) {
+        case 1:
+            system("cls");
+            break;
+        default:
+            system("cls");
+            SetConsoleTextAttribute(hConsole, 4);
+            std::cout << "Некорректный выбор. Пожалуйста, введите цифру 1 для выхода в меню.\n\n";
+            break;
+        }
+    }
+}
 
 void ShellSort(std::vector<int>& data) {
     setlocale(LC_ALL, "Rus");
@@ -25,44 +61,33 @@ void ShellSort(std::vector<int>& data) {
         }
     }
 
-    int size = data.size();
-    for (int interval = size / 2; interval > 0; interval /= 2) {
-        for (int i = interval; i < size; i++) {
-            int temp = data[i];
-            int j;
-            for (j = i; j >= interval && data[j - interval] > temp; j -= interval) {
-                data[j] = data[j - interval];
-            }
-            data[j] = temp;
-        }
+    std::ofstream in("input.txt");
+    for (int& num : data) {
+        in << num << " ";
     }
+    in.close();
+
+    SetConsoleTextAttribute(hConsole, 2);
+    std::cout << "\nИсходный массив записан в файл 'input.txt'\n";
+
+    Sort(data);
+
     SetConsoleTextAttribute(hConsole, 6);
     std::cout << "\nОтсортированный массив:\n";
     SetConsoleTextAttribute(hConsole, 7);
+    std::ofstream out("output.txt");
     for (int& num : data) {
         std::cout << num << " ";
+        out << num << " ";
     }
     std::cout << "\n";
+    out.close();
     data.clear();
 
-    int choice = 0;
-    while (choice != 1) {
-        SetConsoleTextAttribute(hConsole, 4);
-        std::cout << "\n1.Выход в меню\n";
-        SetConsoleTextAttribute(hConsole, 6);
-        std::cout << "\nВведите свой выбор: ";
-        std::cin >> choice;
-        switch (choice) {
-        case 1:
-            system("cls");
-            break;
-        default:
-            system("cls");
-            SetConsoleTextAttribute(hConsole, 4);
-            std::cout << "Некорректный выбор. Пожалуйста, введите цифру 1 для выхода в меню.\n\n";
-            break;
-        }
-    }
+    SetConsoleTextAttribute(hConsole, 2);
+    std::cout << "\nОтсортированный массив записан в файл 'output.txt'\n";
+
+    ExitToMenu();
 }
 
 void ShellSortRand(std::vector<int>& data) {
@@ -87,66 +112,96 @@ void ShellSortRand(std::vector<int>& data) {
     }
 
     if (count > 100) {
-        SetConsoleTextAttribute(hConsole, 7);
-        std::cout << "\nИсходный массив записан в файл";
+        SetConsoleTextAttribute(hConsole, 2);
+        std::cout << "\nИсходный массив записан в файл 'input.txt'";
+        std::ofstream in("input.txt");
+        for (int& num : data) {
+            in << num << " ";
+        }
+        in.close();
     }
-
     else {
         SetConsoleTextAttribute(hConsole, 6);
         std::cout << "\nИсходный массив:\n";
+        std::ofstream in("input.txt");
         SetConsoleTextAttribute(hConsole, 7);
         for (int& num : data) {
             std::cout << num << " ";
+            in << num << " ";
         }
         std::cout << "\n";
+        in.close();
+        SetConsoleTextAttribute(hConsole, 2);
+        std::cout << "\nИсходный массив записан в файл 'input.txt'\n";
     }
-    int size = data.size();
-    for (int interval = size / 2; interval > 0; interval /= 2) {
-        for (int i = interval; i < size; i++) {
-            int temp = data[i];
-            int j;
-            for (j = i; j >= interval && data[j - interval] > temp; j -= interval) {
-                data[j] = data[j - interval];
-            }
-            data[j] = temp;
-        }
-    }
+
+    Sort(data);
 
     if (count > 100) {
-        SetConsoleTextAttribute(hConsole, 7);
-        std::cout << "\nОтсортированный массив записан в файл\n";
+        SetConsoleTextAttribute(hConsole, 2);
+        std::cout << "\nОтсортированный массив записан в файл 'output.txt'\n";
+        std::ofstream out("output.txt");
+        for (int& num : data) {
+            out << num << " ";
+        }
+        out.close();
     }
-
     else {
         SetConsoleTextAttribute(hConsole, 6);
         std::cout << "\nОтсортированный массив:\n";
+        std::ofstream out("output.txt");
         SetConsoleTextAttribute(hConsole, 7);
         for (int& num : data) {
             std::cout << num << " ";
+            out << num << " ";
         }
         std::cout << "\n";
+        out.close();
+        SetConsoleTextAttribute(hConsole, 2);
+        std::cout << "\nОтсортированный массив записан в файл 'output.txt'\n";
     }
 
     data.clear();
 
-    int choice = 0;
-    while (choice != 1) {
-        SetConsoleTextAttribute(hConsole, 4);
-        std::cout << "\n1.Выход в меню\n";
-        SetConsoleTextAttribute(hConsole, 6);
-        std::cout << "\nВведите свой выбор: ";
-        std::cin >> choice;
-        switch (choice) {
-        case 1:
-            system("cls");
-            break;
-        default:
-            system("cls");
-            SetConsoleTextAttribute(hConsole, 4);
-            std::cout << "Некорректный выбор. Пожалуйста, введите цифру 1 для выхода в меню.\n\n";
-            break;
-        }
+    ExitToMenu();
+}
+
+void ShellSortFromFile(std::vector<int>& data) {
+    setlocale(LC_ALL, "Rus");
+
+    SetConsoleTextAttribute(hConsole, 7);
+    std::ifstream in("input.txt");
+    int num;
+    while (in >> num) {
+        data.push_back(num);
     }
+    in.close();
+    SetConsoleTextAttribute(hConsole, 6);
+    std::cout << "Исходный массив из файла 'input.txt':\n";
+    SetConsoleTextAttribute(hConsole, 7);
+    for (int& num : data) {
+        std::cout << num << " ";
+    }
+    std::cout << "\n";
+
+    Sort(data);
+
+    SetConsoleTextAttribute(hConsole, 6);
+    std::cout << "\nОтсортированный массив:\n";
+    SetConsoleTextAttribute(hConsole, 7);
+    std::ofstream out("output.txt");
+    for (int& num : data) {
+        std::cout << num << " ";
+        out << num << " ";
+    }
+    std::cout << "\n";
+    out.close();
+    data.clear();
+
+    SetConsoleTextAttribute(hConsole, 2);
+    std::cout << "\nОтсортированный массив записан в файл 'output.txt'\n";
+
+    ExitToMenu();
 }
 
 void Menu(std::vector<int>& data) {
@@ -173,8 +228,10 @@ void Menu(std::vector<int>& data) {
         case 2:
             system("cls");
             ShellSortRand(data);
-            //case 3:
-                //system("cls");
+            break;
+        case 3:
+            system("cls");
+            ShellSortFromFile(data);
         case 4:
             system("cls");
             break;
