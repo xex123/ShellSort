@@ -8,6 +8,7 @@ HANDLE hConsole;
 
 void Sort(std::vector<int>& data) {
     int size = data.size();
+    clock_t start = clock();
     for (int interval = size / 2; interval > 0; interval /= 2) {
         for (int i = interval; i < size; i++) {
             int temp = data[i];
@@ -18,6 +19,10 @@ void Sort(std::vector<int>& data) {
             data[j] = temp;
         }
     }
+    clock_t stop = clock();
+    double duration = double(stop - start) / CLOCKS_PER_SEC;
+    SetConsoleTextAttribute(hConsole, 7);
+    std::cout << "\nВремя сортировки массива состовляет: " << duration * 1000 << " миллисекунд\n";
 }
 
 void ExitToMenu() {
@@ -106,7 +111,7 @@ void ShellSortRand(std::vector<int>& data) {
     SetConsoleTextAttribute(hConsole, 7);
     std::cin >> maxVal;
 
-    for (int i = 0; i < count; ++i) {
+    for (int i = 0; i < count; i++) {
         int randomNum = rand() % (maxVal - minVal + 1) + minVal;
         data.push_back(randomNum);
     }
